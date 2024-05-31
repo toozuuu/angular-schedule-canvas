@@ -1,0 +1,68 @@
+<div class="date-range-picker">
+  <label for="start-date">Start Date:</label>
+  <input id="start-date" type="date" [(ngModel)]="startDate">
+
+  <label for="end-date">End Date:</label>
+  <input id="end-date" type="date" [(ngModel)]="endDate">
+
+  <button (click)="updateDateRange()">Update Date Range</button>
+</div>
+
+<div class="holiday-picker">
+  <label for="holiday-date">Holiday Date:</label>
+  <input id="holiday-date" type="date" [(ngModel)]="holidayDate">
+  <button (click)="addHoliday()">Add Holiday</button>
+</div>
+
+<div class="schedule-picker">
+  <label for="schedule-date">Schedule Date:</label>
+  <input id="schedule-date" type="date" [(ngModel)]="scheduleDate">
+
+  <label for="schedule-name">Name:</label>
+  <input id="schedule-name" type="text" [(ngModel)]="scheduleName">
+
+  <label for="schedule-type">Type:</label>
+  <select id="schedule-type" [(ngModel)]="scheduleType">
+    <option value="attendant">Attendant</option>
+    <option value="aesthetician">Aesthetician</option>
+  </select>
+
+  <label for="schedule-start-time">Start Time:</label>
+  <input id="schedule-start-time" type="time" [(ngModel)]="scheduleStartTime">
+
+  <label for="schedule-end-time">End Time:</label>
+  <input id="schedule-end-time" type="time" [(ngModel)]="scheduleEndTime">
+
+  <button (click)="addSchedule()">Add Schedule</button>
+</div>
+
+<div class="schedule-container">
+  <div class="header">
+    <div class="date-axis">
+      <div class="empty-cell"></div>
+      <div *ngFor="let time of times">{{ time }}</div>
+    </div>
+  </div>
+  <div class="content">
+    <div *ngFor="let date of dates" class="date-row">
+      <div class="date-cell">{{ date }}</div>
+      <div *ngFor="let time of times" class="time-cell" [ngClass]="{'holiday-cell': isHoliday(date)}"
+           cdkDropList
+           [cdkDropListData]="getScheduleItems(date, time)"
+           (cdkDropListDropped)="drop($event)">
+        <div *ngFor="let item of getScheduleItems(date, time)"
+             cdkDrag
+             [ngClass]="{'attendant': item.type === 'attendant', 'aesthetician': item.type === 'aesthetician'}"
+             [attr.rowspan]="calculateRowSpan(item)">
+          {{ item.name }}
+        </div>
+      </div>
+      <div class="holiday" *ngIf="isHoliday(date)">
+        <div class="title">
+          <h1>Closed</h1>
+          <p>"{{getHolidayDescription(date)}}"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

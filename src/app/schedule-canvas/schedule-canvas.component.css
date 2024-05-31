@@ -1,0 +1,111 @@
+.date-range-picker, .holiday-picker, .schedule-picker {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.schedule-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15vh;
+}
+
+.header, .content {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-axis {
+  display: flex;
+}
+
+.date-axis .empty-cell, .date-axis div {
+  width: 103px;
+  text-align: center;
+}
+
+.date-row {
+  display: flex;
+  position: relative;
+}
+
+.date-cell {
+  width: 100px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.time-cell {
+  width: 100px;
+  min-height: 100px;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  flex-wrap: wrap;
+}
+
+.items-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+.holiday {
+  width: 60%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.holiday .title {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+  margin-top: 1vh;
+}
+
+.holiday .title h1,
+.holiday .title p {
+  margin: 0;
+}
+
+.time-cell.cdk-drag-preview {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.time-cell.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.holiday-row {
+  background-color: #d3d3d3;
+  width: fit-content;
+}
+
+.holiday-cell {
+  background-color: #d3d3d3;
+}
+
+.attendant {
+  background-color: #8BC34A; /* Green */
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  margin: 2px;
+}
+
+.aesthetician {
+  background-color: #E91E63; /* Pink */
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  margin: 2px;
+}
