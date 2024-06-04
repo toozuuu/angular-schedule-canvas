@@ -38,7 +38,11 @@ export class ScheduleCanvasComponent {
   scheduleName: string = '';
   scheduleType: string = '';
 
-  getScheduleItems(date: string, time: string): ScheduleItem[] {
+  getScheduleItemsForDate(date: string): ScheduleItem[] {
+    return this.scheduleItems.filter(item => item.date === date);
+  }
+
+  getScheduleItemsForDateAndTime(date: string, time: string): ScheduleItem[] {
     return this.scheduleItems.filter(item => item.date === date && this.isWithinTimeRange(item, time));
   }
 
@@ -49,11 +53,12 @@ export class ScheduleCanvasComponent {
     return currentTime.isSameOrAfter(itemStartTime) && currentTime.isBefore(itemEndTime);
   }
 
-  calculateRowSpan(item: ScheduleItem): number {
+  calculateGridRow(item: ScheduleItem): string {
     const start = moment(item.startTime, 'h:mm A');
     const end = moment(item.endTime, 'h:mm A');
-    const duration = moment.duration(end.diff(start)).asHours();
-    return Math.ceil(duration);
+    const startRow = this.times.indexOf(start.format('h:mm A')) + 1;
+    const endRow = this.times.indexOf(end.format('h:mm A')) + 2;
+    return `${startRow} / ${endRow}`;
   }
 
   drop(event: CdkDragDrop<ScheduleItem[]>) {
