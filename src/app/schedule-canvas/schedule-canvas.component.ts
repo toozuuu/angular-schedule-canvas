@@ -21,7 +21,7 @@ interface Holiday {
   styleUrls: ['./schedule-canvas.component.css']
 })
 export class ScheduleCanvasComponent {
-  times = ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
+  times = ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM' , '6:00 PM' , '7:00 PM'];
   dates: string[] = [];
   scheduleItems: ScheduleItem[] = [
     { name: 'Anne Greene', date: '11 MON', startTime: '8:00 AM', endTime: '1:00 PM', type: 'attendant' },
@@ -51,6 +51,11 @@ export class ScheduleCanvasComponent {
     const itemEndTime = moment(item.endTime, 'h:mm A');
     const currentTime = moment(time, 'h:mm A');
     return currentTime.isSameOrAfter(itemStartTime) && currentTime.isBefore(itemEndTime);
+  }
+
+  getScheduleItemForDateAndTime(date: string, time: string): ScheduleItem | null {
+    const scheduleItems = this.scheduleItems.filter(item => item.date === date && this.isWithinTimeRange(item, time));
+    return scheduleItems.length > 0 ? scheduleItems[0] : null;
   }
 
   calculateGridRow(item: ScheduleItem): string {
