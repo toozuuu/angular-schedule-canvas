@@ -124,12 +124,19 @@ export class ScheduleCanvasComponent {
 
   addSchedule() {
     if (this.scheduleDate && this.scheduleStartTime && this.scheduleEndTime && this.scheduleName && this.scheduleType) {
+      const date = moment(this.scheduleDate).format('D ddd').toUpperCase();
+
+      // Check if the selected date is a holiday
+      if (this.isHoliday(date)) {
+        alert('Cannot add a schedule on a holiday.');
+        return;
+      }
+
       if (!this.validateTimeRange(this.scheduleStartTime, this.scheduleEndTime)) {
         alert('End time must be after start time');
         return;
       }
 
-      const date = moment(this.scheduleDate).format('D ddd').toUpperCase();
       const startTime = this.roundToNearestSlot(this.scheduleStartTime);
       const endTime = this.roundToNearestSlot(this.scheduleEndTime, true);
 
@@ -140,6 +147,7 @@ export class ScheduleCanvasComponent {
         endTime: endTime,
         type: this.scheduleType
       });
+
       this.scheduleName = '';
       this.scheduleStartTime = '';
       this.scheduleEndTime = '';
