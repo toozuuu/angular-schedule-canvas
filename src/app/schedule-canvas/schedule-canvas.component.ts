@@ -42,10 +42,6 @@ export class ScheduleCanvasComponent {
     return this.scheduleItems.filter(item => item.date === date);
   }
 
-  getScheduleItemsForDateAndTime(date: string, time: string): ScheduleItem[] {
-    return this.scheduleItems.filter(item => item.date === date && this.isWithinTimeRange(item, time));
-  }
-
   isWithinTimeRange(item: ScheduleItem, time: string): boolean {
     const itemStartTime = moment(item.startTime, 'h:mm A');
     const itemEndTime = moment(item.endTime, 'h:mm A');
