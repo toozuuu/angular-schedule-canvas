@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import {Component} from '@angular/core';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import * as moment from 'moment';
 
 interface ScheduleItem {
@@ -21,12 +21,12 @@ interface Holiday {
   styleUrls: ['./schedule-canvas.component.css']
 })
 export class ScheduleCanvasComponent {
-  times = ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM' , '6:00 PM' , '7:00 PM'];
+  times = ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'];
   dates: string[] = [];
   scheduleItems: ScheduleItem[] = [
-    { name: 'Anne Greene', date: '11 MON', startTime: '8:00 AM', endTime: '1:00 PM', type: 'attendant' },
-    { name: 'Jenny Slate', date: '11 MON', startTime: '10:00 AM', endTime: '3:00 PM', type: 'aesthetician' },
-    { name: 'Jane Brown', date: '11 MON', startTime: '1:00 PM', endTime: '6:00 PM', type: 'attendant' }
+    {name: 'Anne Greene', date: '7 FRI', startTime: '8:00 AM', endTime: '1:00 PM', type: 'attendant'},
+    {name: 'Jenny Slate', date: '7 FRI', startTime: '10:00 AM', endTime: '3:00 PM', type: 'aesthetician'},
+    {name: 'Jane Brown', date: '7 FRI', startTime: '1:00 PM', endTime: '6:00 PM', type: 'attendant'}
   ];
   holidays: Holiday[] = [];
   startDate: string = '';
@@ -49,17 +49,18 @@ export class ScheduleCanvasComponent {
     return currentTime.isSameOrAfter(itemStartTime) && currentTime.isBefore(itemEndTime);
   }
 
-  getScheduleItemForDateAndTime(date: string, time: string): ScheduleItem | null {
-    const scheduleItems = this.scheduleItems.filter(item => item.date === date && this.isWithinTimeRange(item, time));
-    return scheduleItems.length > 0 ? scheduleItems[0] : null;
+  getScheduleItemsForDateAndTime(date: string, time: string): ScheduleItem[] {
+    return this.scheduleItems.filter(item => item.date === date && this.isWithinTimeRange(item, time));
   }
 
-  calculateGridRow(item: ScheduleItem): string {
+  calculateGridRowStart(item: ScheduleItem): number {
     const start = moment(item.startTime, 'h:mm A');
+    return this.times.indexOf(start.format('h:mm A')) + 1;
+  }
+
+  calculateGridRowEnd(item: ScheduleItem): number {
     const end = moment(item.endTime, 'h:mm A');
-    const startRow = this.times.indexOf(start.format('h:mm A')) + 1;
-    const endRow = this.times.indexOf(end.format('h:mm A')) + 2;
-    return `${startRow} / ${endRow}`;
+    return this.times.indexOf(end.format('h:mm A')) + 2;
   }
 
   drop(event: CdkDragDrop<ScheduleItem[]>) {
@@ -99,7 +100,7 @@ export class ScheduleCanvasComponent {
     if (this.holidayDate) {
       const holiday = moment(this.holidayDate).format('D ddd').toUpperCase();
       if (!this.holidays.some(h => h.date === holiday)) {
-        this.holidays.push({ date: holiday, name: 'Public Holiday' });
+        this.holidays.push({date: holiday, name: 'Public Holiday'});
       }
     }
   }
@@ -140,6 +141,18 @@ export class ScheduleCanvasComponent {
 
       const startTime = this.roundToNearestSlot(this.scheduleStartTime);
       const endTime = this.roundToNearestSlot(this.scheduleEndTime, true);
+
+      // Check if there is already a schedule item for the same date and time range
+      const existingItem = this.scheduleItems.find(item =>
+        item.date === date &&
+        item.startTime === startTime &&
+        item.endTime === endTime
+      );
+
+      if (existingItem) {
+        alert('A schedule already exists for this date and time range.');
+        return;
+      }
 
       this.scheduleItems.push({
         name: this.scheduleName,

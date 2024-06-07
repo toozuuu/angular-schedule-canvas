@@ -47,22 +47,24 @@
     <div *ngFor="let date of dates" class="date-row" cdkDropList [cdkDropListData]="getScheduleItemsForDate(date)" (cdkDropListDropped)="drop($event)">
       <div class="date-cell">{{ date }}</div>
       <div *ngFor="let time of times" class="time-cell" [ngClass]="{'holiday-cell': isHoliday(date)}">
-        <ng-container *ngIf="getScheduleItemForDateAndTime(date, time) as item">
-          <div class="scheduleItem" cdkDrag [ngClass]="{'attendant': item.type === 'attendant', 'aesthetician': item.type === 'aesthetician'}" [style.gridRow]="calculateGridRow(item)">
-            <div class="col">
-              <div class="pro-pic">
-                <img src="assets/profile.jpg" alt="">
-                <h1>{{ item.name }}</h1>
+        <div class="items-wrapper">
+          <ng-container *ngFor="let item of getScheduleItemsForDateAndTime(date, time)">
+            <div class="scheduleItem" cdkDrag [ngClass]="{'attendant': item.type === 'attendant', 'aesthetician': item.type === 'aesthetician'}" [style.grid-row-start]="calculateGridRowStart(item)" [style.grid-row-end]="calculateGridRowEnd(item)">
+              <div class="col">
+                <div class="pro-pic">
+                  <img src="assets/profile.jpg" alt="">
+                  <h1>{{ item.name }}</h1>
+                </div>
+              </div>
+              <div class="col">
+                <div class="time-range">
+                  <span>{{ item.startTime }}</span>
+                  <span>{{ item.endTime }}</span>
+                </div>
               </div>
             </div>
-            <div class="col">
-              <div class="time-range">
-                <span>{{ item.startTime }}</span>
-                <span>{{ item.endTime }}</span>
-              </div>
-            </div>
-          </div>
-        </ng-container>
+          </ng-container>
+        </div>
       </div>
       <div class="holiday" *ngIf="isHoliday(date)">
         <div class="title">
