@@ -36,6 +36,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .time-cell {
@@ -51,15 +52,12 @@
 }
 
 .items-wrapper {
-  display: flex;
-  flex-wrap: wrap;
   width: 100%;
-  justify-content: center;
 }
 
 .holiday {
-  width: 60%;
-  position: absolute;
+  width: 65%;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
